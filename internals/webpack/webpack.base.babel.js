@@ -7,6 +7,11 @@ const webpack = require('webpack');
 
 module.exports = options => ({
   mode: options.mode,
+  node: {
+    fs: 'empty',
+    net: 'empty',
+    tls: 'empty',
+  },
   entry: options.entry,
   output: Object.assign(
     {

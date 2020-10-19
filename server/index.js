@@ -3,6 +3,7 @@
 const express = require('express');
 const logger = require('./logger');
 const multer = require('multer');
+const tools = require('../parser');
 
 // var uploading = multer({
 //   dest: 'pdf/',
@@ -50,8 +51,9 @@ app.get('*.js', (req, res, next) => {
   next();
 });
 
-app.post('/upload', uploading.any(), function (req, res) {
+app.post('/upload', uploading.any(), function(req, res) {
   console.log('POST successful');
+  tools.parsePDF(`./pdf/${req.files[0].originalname}`);
   res.send(req.files[0].originalname);
 });
 

@@ -1,5 +1,7 @@
 import React from 'react';
 import axios, { post } from 'axios';
+import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
+import { DownloadDoc } from './renderPDF';
 
 class SimpleReactFileUpload extends React.Component {
   constructor(props) {
@@ -7,6 +9,7 @@ class SimpleReactFileUpload extends React.Component {
     this.state = {
       file: null,
       fileName: null,
+      loc: null,
     };
     this.onFormSubmit = this.onFormSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
@@ -36,29 +39,35 @@ class SimpleReactFileUpload extends React.Component {
         'content-type': 'multipart/form-data',
       },
     };
-    return post(url, formData, config).then(res => {
-      this.setState({ fileName: res.data })
-
-    }).catch(function (error) {
-      // handle error
-      console.log(error.response);
-    });
+    return post(url, formData, config)
+      .then(res => {
+        this.setState({ fileName: res.data });
+        this.setState({ loc: '../../../parsed_textbook.json' });
+        // ReactPDF.render(<MyDocument />, '../../../pdf/guide.pdf');
+      })
+      .catch(function(error) {
+        // handle error
+        console.log(error.response);
+      });
   }
 
   render() {
     return (
-      <form onSubmit={this.onFormSubmit}>
-        <h1>File Upload</h1>
-        <input type="file" onChange={this.onChange} />
-        <button type="submit">Upload</button>
-        <div>
-          {
-            this.state.fileName
-              ? <p>You have uploaded {this.state.fileName}</p>
-              : <p></p>
-          }
-        </div>
-      </form>
+      <div>
+        <form onSubmit={this.onFormSubmit}>
+          <h1>File Upload</h1>
+          <input type="file" onChange={this.onChange} />
+          <button type="submit">Upload</button>
+          <div>
+            {this.state.fileName ? (
+              <p>You have uploaded {this.state.fileName}</p>
+            ) : (
+              <p />
+            )}
+          </div>
+        </form>
+        <div>{this.state.fileName ? <DownloadDoc /> : <div />}</div>
+      </div>
     );
   }
 }
