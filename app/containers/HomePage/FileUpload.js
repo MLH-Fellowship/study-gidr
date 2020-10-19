@@ -6,21 +6,13 @@ class SimpleReactFileUpload extends React.Component {
     super(props);
     this.state = {
       file: null,
+      fileName: null,
     };
     this.onFormSubmit = this.onFormSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
     this.fileUpload = this.fileUpload.bind(this);
   }
 
-  // uploadFile(file) {
-  //   fetch('http://localhost:3000/upload', {
-  //     // content-type header should not be specified!
-  //     method: 'POST',
-  //     body: file
-  //   })
-  //     .catch(error => console.log(error)
-  //     );
-  // }
   onFormSubmit(e) {
     e.preventDefault(); // Stop form submit
     this.fileUpload(this.state.file)
@@ -44,7 +36,10 @@ class SimpleReactFileUpload extends React.Component {
         'content-type': 'multipart/form-data',
       },
     };
-    return post(url, formData, config).catch(function(error) {
+    return post(url, formData, config).then(res => {
+      this.setState({ fileName: res.data })
+
+    }).catch(function (error) {
       // handle error
       console.log(error.response);
     });
@@ -56,6 +51,13 @@ class SimpleReactFileUpload extends React.Component {
         <h1>File Upload</h1>
         <input type="file" onChange={this.onChange} />
         <button type="submit">Upload</button>
+        <div>
+          {
+            this.state.fileName
+              ? <p>You have uploaded {this.state.fileName}</p>
+              : <p></p>
+          }
+        </div>
       </form>
     );
   }

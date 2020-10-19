@@ -50,10 +50,9 @@ app.get('*.js', (req, res, next) => {
   next();
 });
 
-app.post('/upload', uploading.any(), function(req, res) {
+app.post('/upload', uploading.any(), function (req, res) {
   console.log('POST successful');
-  console.log(req.files[0].name);
-  res.send(req.files[0].name);
+  res.send(req.files[0].originalname);
 });
 
 // Start your app.
