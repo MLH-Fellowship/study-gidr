@@ -42,8 +42,11 @@ function parsePDF(textbookName)
           {
             if(textIsMain == false && ((pdfData.formImage.Pages[i].Texts[j].R[0].TS[2] == 1 && pdfData.formImage.Pages[i].Texts[j].R[0].TS[1] > textFontSize)))
             {
-              heading.push(cleanString(mainpoint));
-              paragraph.push(cleanString(textInfo));
+              if((mainpoint.length < 25 && mainpoint.length > 5 && !mainpoint.includes("%7C")) && textInfo.length > 25)
+              {
+                heading.push(cleanString(mainpoint));
+                paragraph.push(cleanString(textInfo));
+              }
               mainpoint = "";
               textInfo = "";
             }
@@ -69,6 +72,7 @@ function parsePDF(textbookName)
       });
 
     });
+    console.log(textbook.heading.length);
     fs.writeFileSync("package.json", JSON.stringify(textbook));
   })();
 }
@@ -92,5 +96,6 @@ function findTextFontSize(fontSizes)
 
 function cleanString(string)
 {
-  return (((((((string.split("%20").join(" ")).split("%2C").join(",")).split("%2F").join("/")).split("%23").join("#").split("%3A").join(":")).split("%40").join("@")).split("%E2%80%94").join("-")).split("%E2%80%99").join("'"));
+  string = (((((((string.split("%20").join(" ")).split("%2C").join(",")).split("%2F").join("/")).split("%23").join("#").split("%3A").join(":")).split("%40").join("@")).split("%E2%80%94").join("-")).split("%E2%80%99").join("'"));
+  return (((string.split("%E2%80%90").join("")).split("%5B").join("[")).split("%5D").join("]")).split("%3D").join("=");
 }
