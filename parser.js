@@ -1,8 +1,6 @@
 const { rejects } = require('assert');
 const { resolve } = require('path');
 
-const bookname = "Yves Hilpisch - Python for Finance  Analyze Big Financial Data-O'Reilly Media (2015).pdf";
-parsePDF(bookname);
 
 function parsePDF(textbookName)
 {
@@ -28,7 +26,7 @@ function parsePDF(textbookName)
           }
         }
 
-        const textFontSize = findTextFontSize(fontSizes);
+        const textFontSize = Number(findTextFontSize(fontSizes)) + 3;
 
         let mainpoint = "";
         let textInfo = "";
@@ -72,7 +70,7 @@ function parsePDF(textbookName)
       });
 
     });
-    console.log(textbook.heading.length);
+
     fs.writeFileSync("package.json", JSON.stringify(textbook));
   })();
 }
